@@ -201,7 +201,7 @@
 					if (o.edges < interval.start && (interval.start - o.edges != 1)) {
 						var $element = $('<span class="ellipse">' + o.ellipseText + '</span>');
 						$panel.append($('<li class="disabled"></li>').append($element));
-						o.onElementRender(o.ellipseText, [o.edges, interval.start - 1], $element);
+						o.onElementRender(o.ellipseText, [o.edges + 1, interval.start], $element);
 					} else if (interval.start - o.edges == 1) {
 						methods._appendItem.call(this, o.edges);
 					}
@@ -218,7 +218,7 @@
 					if (o.pages - o.edges > interval.end && (o.pages - o.edges - interval.end != 1)) {
 						var $element = $('<span class="ellipse">' + o.ellipseText + '</span>');
 						$panel.append($('<li class="disabled"></li>').append($element));
-						o.onElementRender(o.ellipseText, [interval.end, o.pages - o.edges - 1], $element);
+						o.onElementRender(o.ellipseText, [interval.end + 1, o.pages - o.edges], $element);
 					} else if (o.pages - o.edges - interval.end == 1) {
 						methods._appendItem.call(this, interval.end);
 					}
@@ -242,7 +242,7 @@
 					if (o.pages - o.edges > interval.end && (o.pages - o.edges - interval.end != 1)) {
 						var $element = $('<span class="ellipse">' + o.ellipseText + '</span>');
 						$panel.append($('<li class="disabled"></li>').append($element));
-						o.onElementRender(o.ellipseText, [interval.end, o.pages - o.edges - 1], $element);
+						o.onElementRender(o.ellipseText, [interval.end + 1, o.pages - o.edges], $element);
 					} else if (o.pages - o.edges - interval.end == 1) {
 						methods._appendItem.call(this, interval.end);
 					}
@@ -258,7 +258,7 @@
 					if (o.edges < interval.start && (interval.start - o.edges != 1)) {
 						var $element = $('<span class="ellipse">' + o.ellipseText + '</span>');
 						$panel.append($('<li class="disabled"></li>').append($element));
-						o.onElementRender(o.ellipseText, [o.edges, interval.start - 1], $element);
+						o.onElementRender(o.ellipseText, [o.edges + 1, interval.start], $element);
 					} else if (interval.start - o.edges == 1) {
 						methods._appendItem.call(this, o.edges);
 					}
@@ -324,7 +324,7 @@
 				$link.addClass(options.classes);
 			}
 
-			o.onElementRender(options.text, pageIndex, $link);
+			o.onElementRender(options.text, pageIndex + 1, $link);
 
 			$linkWrapper.append($link);
 
