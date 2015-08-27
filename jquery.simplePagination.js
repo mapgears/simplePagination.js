@@ -32,6 +32,13 @@
 				invertPageOrder: false,
 				useStartEdge : true,
 				useEndEdge : true,
+				onElementRender: function(label, pageNumber, $element) {
+				  // Callback triggered when rendering the page buttons and
+				  // ellipses.
+				  // pageNumber can be a number if the element represents a
+				  // single page, or an array of numbers [start, end] if the
+				  // element represents multiple pages (e.g. the ellipses)
+				},
 				onPageClick: function(pageNumber, event) {
 					// Callback triggered when a page is clicked
 					// Page number is given as an optional parameter
@@ -167,7 +174,7 @@
 				tagName;
 
 			methods.destroy.call(this);
-			
+
 			tagName = (typeof this.prop === 'function') ? this.prop('tagName') : this.attr('tagName');
 
 			var $panel = tagName === 'UL' ? this : $('<ul' + (o.listStyle ? ' class="' + o.listStyle + '"' : '') + '></ul>').appendTo(this);
@@ -192,7 +199,9 @@
 						}
 					}
 					if (o.edges < interval.start && (interval.start - o.edges != 1)) {
-						$panel.append('<li class="disabled"><span class="ellipse">' + o.ellipseText + '</span></li>');
+						var $element = $('<span class="ellipse">' + o.ellipseText + '</span>');
+						$panel.append($('<li class="disabled"></li>').append($element));
+						o.onElementRender(o.ellipseText, [o.edges, interval.start - 1], $element);
 					} else if (interval.start - o.edges == 1) {
 						methods._appendItem.call(this, o.edges);
 					}
@@ -207,7 +216,9 @@
 					}
 
 					if (o.pages - o.edges > interval.end && (o.pages - o.edges - interval.end != 1)) {
-						$panel.append('<li class="disabled"><span class="ellipse">' + o.ellipseText + '</span></li>');
+						var $element = $('<span class="ellipse">' + o.ellipseText + '</span>');
+						$panel.append($('<li class="disabled"></li>').append($element));
+						o.onElementRender(o.ellipseText, [interval.end, o.pages - o.edges - 1], $element);
 					} else if (o.pages - o.edges - interval.end == 1) {
 						methods._appendItem.call(this, interval.end);
 					}
@@ -229,7 +240,9 @@
 			if (!o.invertPageOrder) {
 				if (interval.end < o.pages && o.edges > 0) {
 					if (o.pages - o.edges > interval.end && (o.pages - o.edges - interval.end != 1)) {
-						$panel.append('<li class="disabled"><span class="ellipse">' + o.ellipseText + '</span></li>');
+						var $element = $('<span class="ellipse">' + o.ellipseText + '</span>');
+						$panel.append($('<li class="disabled"></li>').append($element));
+						o.onElementRender(o.ellipseText, [interval.end, o.pages - o.edges - 1], $element);
 					} else if (o.pages - o.edges - interval.end == 1) {
 						methods._appendItem.call(this, interval.end);
 					}
@@ -243,7 +256,9 @@
 			} else {
 				if (interval.start > 0 && o.edges > 0) {
 					if (o.edges < interval.start && (interval.start - o.edges != 1)) {
-						$panel.append('<li class="disabled"><span class="ellipse">' + o.ellipseText + '</span></li>');
+						var $element = $('<span class="ellipse">' + o.ellipseText + '</span>');
+						$panel.append($('<li class="disabled"></li>').append($element));
+						o.onElementRender(o.ellipseText, [o.edges, interval.start - 1], $element);
 					} else if (interval.start - o.edges == 1) {
 						methods._appendItem.call(this, o.edges);
 					}
@@ -308,6 +323,8 @@
 			if (options.classes) {
 				$link.addClass(options.classes);
 			}
+
+			o.onElementRender(options.text, pageIndex, $link);
 
 			$linkWrapper.append($link);
 
