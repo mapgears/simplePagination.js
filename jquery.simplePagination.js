@@ -25,6 +25,7 @@
 				nextText: 'Next',
 				firstText: '',
 				lastText: '',
+				showEllipses: null,
 				ellipseText: '&hellip;',
 				cssStyle: 'light-theme',
 				listStyle: '',
@@ -51,6 +52,10 @@
 			}, options || {});
 
 			var self = this;
+
+			if (o.showEllipses == null) {
+			  o.showEllipses = (o.edges > 0);
+			}
 
 			o.pages = o.pages ? o.pages : Math.ceil(o.items / o.itemsOnPage) ? Math.ceil(o.items / o.itemsOnPage) : 1;
 			if (o.currentPage)
@@ -193,10 +198,13 @@
 			if (o.nextText && o.nextAtFront) {
 				methods._appendItem.call(this, !o.invertPageOrder ? o.currentPage + 1 : o.currentPage - 1, {text: o.nextText, classes: 'next'});
 			}
+			if (o.lastText && o.nextAtFront) {
+				methods._appendItem.call(this, !o.invertPageOrder ? o.pages - 1 : 0, {text: o.lastText, classes: 'last'});
+			}
 
 			// Generate start edges
 			if (!o.invertPageOrder) {
-				if (interval.start > 0 && o.edges > 0) {
+				if (interval.start > 0 && o.showEllipses) {
 					if(o.useStartEdge) {
 						var end = Math.min(o.edges, interval.start);
 						for (i = 0; i < end; i++) {
@@ -212,7 +220,7 @@
 					}
 				}
 			} else {
-				if (interval.end < o.pages && o.edges > 0) {
+				if (interval.end < o.pages && o.showEllipses) {
 					if(o.useStartEdge) {
 						var begin = Math.max(o.pages - o.edges, interval.end);
 						for (i = o.pages - 1; i >= begin; i--) {
@@ -243,7 +251,7 @@
 
 			// Generate end edges
 			if (!o.invertPageOrder) {
-				if (interval.end < o.pages && o.edges > 0) {
+				if (interval.end < o.pages && o.showEllipses) {
 					if (o.pages - o.edges > interval.end && (o.pages - o.edges - interval.end != 1)) {
 						var $element = $('<span class="ellipse">' + o.ellipseText + '</span>');
 						$panel.append($('<li class="disabled"></li>').append($element));
@@ -259,7 +267,7 @@
 					}
 				}
 			} else {
-				if (interval.start > 0 && o.edges > 0) {
+				if (interval.start > 0 && o.showEllipses) {
 					if (o.edges < interval.start && (interval.start - o.edges != 1)) {
 						var $element = $('<span class="ellipse">' + o.ellipseText + '</span>');
 						$panel.append($('<li class="disabled"></li>').append($element));
