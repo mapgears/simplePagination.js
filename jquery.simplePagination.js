@@ -23,6 +23,8 @@
 				hrefTextSuffix: '',
 				prevText: 'Prev',
 				nextText: 'Next',
+				firstText: '',
+				lastText: '',
 				ellipseText: '&hellip;',
 				cssStyle: 'light-theme',
 				listStyle: '',
@@ -33,11 +35,11 @@
 				useStartEdge : true,
 				useEndEdge : true,
 				onElementRender: function(label, pageNumber, $element) {
-				  // Callback triggered when rendering the page buttons and
-				  // ellipses.
-				  // pageNumber can be a number if the element represents a
-				  // single page, or an array of numbers [start, end] if the
-				  // element represents multiple pages (e.g. the ellipses)
+					// Callback triggered when rendering the page buttons and
+					// ellipses.
+					// pageNumber can be a number if the element represents a
+					// single page, or an array of numbers [start, end] if the
+					// element represents multiple pages (e.g. the ellipses)
 				},
 				onPageClick: function(pageNumber, event) {
 					// Callback triggered when a page is clicked
@@ -180,6 +182,9 @@
 			var $panel = tagName === 'UL' ? this : $('<ul' + (o.listStyle ? ' class="' + o.listStyle + '"' : '') + '></ul>').appendTo(this);
 
 			// Generate Prev link
+			if (o.firstText) {
+				methods._appendItem.call(this, !o.invertPageOrder ? 0 : o.pages - 1, {text: o.firstText, classes: 'first'});
+			}
 			if (o.prevText) {
 				methods._appendItem.call(this, !o.invertPageOrder ? o.currentPage - 1 : o.currentPage + 1, {text: o.prevText, classes: 'prev'});
 			}
@@ -275,6 +280,9 @@
 			// Generate Next link (unless option is set for at front)
 			if (o.nextText && !o.nextAtFront) {
 				methods._appendItem.call(this, !o.invertPageOrder ? o.currentPage + 1 : o.currentPage - 1, {text: o.nextText, classes: 'next'});
+			}
+			if (o.lastText && !o.nextAtFront) {
+				methods._appendItem.call(this, !o.invertPageOrder ? o.pages - 1 : 0, {text: o.lastText, classes: 'last'});
 			}
 		},
 
